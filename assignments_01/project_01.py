@@ -11,12 +11,13 @@ import seaborn as sns
 from scipy import stats
 from prefect import task, flow, get_run_logger
 
+
 # ==========================================
 #  Task 1: Load Multiple Years of Data
 # ==========================================
 
 # INSTRUCTION: (@task): Load data from all ten yearly CSV files into a single DataFrame
-DATA_DIR = '../../python-200/assignments/resources/happiness_project'
+DATA_DIR = 'happiness_project'
 OUTPUT_DIR ='outputs'
 
 @task(retries=3, retry_delay_seconds=2)
