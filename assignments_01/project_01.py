@@ -17,7 +17,11 @@ from prefect import task, flow, get_run_logger
 # ==========================================
 
 # INSTRUCTION: (@task): Load data from all ten yearly CSV files into a single DataFrame
-DATA_DIR = 'happiness_project'
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR.parent/ 'assignments_01' / 'resources' / 'happiness_project'
+
 OUTPUT_DIR ='outputs'
 
 @task(retries=3, retry_delay_seconds=2)
@@ -37,11 +41,13 @@ def load_data(data_dir):
         if os.path.exists(filepath):
             df = pd.read_csv(filepath, sep=";", decimal=",")
 
+            COLUMN_MAP = {
+                "ladder_score": "happiness_score",
+            }
+            
             #Standardize columns and I found 2024 happiness score is called ladder score
             df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
-            df = df.rename(columns={
-                "ladder_score": "happiness_score",
-            })
+            df = df.rename(columns= COLUMN_MAP)
 
             ## INSTRUCTION: each row needs to know which year it came from.
             #added year into columns
@@ -238,19 +244,20 @@ def correlation_analysis(df):
         if len(valid_data) > 2:
             r, p = stats.pearsonr(valid_data[col], valid_data['happiness_score'])
 
-            # Keep track of the absolute highest correlation regardless of significance
+            # Track strongest overall (absolute value)
             if abs(r) > abs(max_abs_r):
-                max_abs_r = r
+                max_abs_r = abs(r)
                 strongest_overall = col
+
+            # Track strongest significant (Bonferroni)
+            if p < adjusted_alpha and abs(r) > abs(max_corr):
+                max_corr = abs(r)
+                strongest_sig_var = col
 
             sig_original = "YES" if p < original_alpha else "NO"
             sig_adjusted = "YES" if p < adjusted_alpha else "NO"
             
             logger.info(f"Var: {col} | r: {r:+.4f} | p: {p:.5e} | Sig (0.05): {sig_original} | Sig (Adj): {sig_adjusted}")
-            
-            if abs(r) > abs(max_corr) and p < adjusted_alpha:
-                max_corr = r
-                strongest_sig_var = col
                 
     return strongest_sig_var, strongest_overall
 
@@ -292,12 +299,8 @@ def summary_report(df, hypothesis_results, strongest_var,strongest_all):
         logger.info(f"- NO statistically significant shift during the pandemic (2019 vs 2020) (p-value: {pval:.4e}).")
         
     # 4. The variable most strongly correlated with happiness score (after Bonferroni correction).
-    if strongest_var:
-        logger.info(f"- Strongest correlation (Bonferroni): '{strongest_var}'.")
-    else:
-        logger.info("- No variables survived the Bonferroni.")
-
-    logger.info(f"- Strongest correlation (Overall, regardless of significance): '{strongest_all}'.")
+    logger.info(f"- Strongest correlation (Bonferroni significant): {strongest_var if strongest_var else 'None'}")
+    logger.info(f"- Strongest correlation (Overall strongest absolute value): {strongest_all}")
 
 ##### FLOW CODE #####
 # 2. FLow
