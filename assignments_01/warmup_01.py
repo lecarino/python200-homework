@@ -207,7 +207,7 @@ plt.show()
 
 #COMMENT: The Exponential distribution is more skewed to the right. Mean would be better for central tendency measure for the Normal distribution, while Median is better for the Exponential distribution because it isn't affected by outliers.
 
-# Descriptive Stats Question 5" Print the mean, median, and mode of the following:
+# Descriptive Stats Question 5 Print the mean, median, and mode of the following:
 
 data1 = [10, 12, 12, 16, 18]
 data2 = [10, 12, 12, 16, 150]

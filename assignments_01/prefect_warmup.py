@@ -26,7 +26,7 @@ def summarize_data(series):
         "mode": series.mode()[0]
     }
 
-@flow(name="Data Pipeline Flow")
+@flow(name="data_pipeline")
 def pipeline_flow():
     # Prefect tasks are called inside the flow just like normal functions
     step1_series = create_series(arr_pipe)
