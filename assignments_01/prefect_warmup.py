@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 from prefect import task, flow
 
-# The starting data
 arr_pipe = np.array([12.0, 15.0, np.nan, 14.0, 10.0, np.nan, 18.0, 14.0, 16.0, 22.0, np.nan, 13.0])
 
 @task
@@ -28,13 +27,10 @@ def summarize_data(series):
 
 @flow(name="data_pipeline")
 def pipeline_flow():
-    # Prefect tasks are called inside the flow just like normal functions
     series = create_series(arr_pipe)
     cleaned = clean_data(series)
     return summarize_data(cleaned)
     
-
-# This ensures the flow runs when you execute the script from the terminal
 if __name__ == "__main__":
     pipeline_flow()
 
