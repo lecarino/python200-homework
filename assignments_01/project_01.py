@@ -174,7 +174,6 @@ def hypothesis_testing(df):
     #tstat,pval
     t_stat, p_val = stats.ttest_ind(happy_scores_2019, happy_scores_2020)
 
-    #print
     logger.info(f"2019 vs 2020 Comparison:")
     logger.info(f"Mean 2019: {mean_2019:.3f} | Mean 2020: {mean_2020:.3f}")
     logger.info(f"T-statistic: {t_stat:.4f} | P-value: {p_val:.4f}")
@@ -199,7 +198,6 @@ def hypothesis_testing(df):
     #tstat,pval
     t_stat_2,p_val_2 = stats.ttest_ind(we_scores,na_scores)
 
-    #print
     logger.info(f"Western Europe vs North America and ANZ Comparison:")
     logger.info(f"Mean Western Europe: {we_mean:.3f} | Mean North America and ANZ: {na_mean:.3f}")
     logger.info(f"T-statistic: {t_stat_2:.4f} | P-value: {p_val_2:.4f}")

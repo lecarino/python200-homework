@@ -29,15 +29,10 @@ def summarize_data(series):
 @flow(name="data_pipeline")
 def pipeline_flow():
     # Prefect tasks are called inside the flow just like normal functions
-    step1_series = create_series(arr_pipe)
-    step2_clean = clean_data(step1_series)
-    summary_results = summarize_data(step2_clean)
+    series = create_series(arr_pipe)
+    cleaned = clean_data(series)
+    return summarize_data(cleaned)
     
-    print("\n--- Prefect Pipeline Results ---")
-    for key, value in summary_results.items():
-        print(f"{key.capitalize()}: {value:.4f}")
-        
-    return summary_results
 
 # This ensures the flow runs when you execute the script from the terminal
 if __name__ == "__main__":
