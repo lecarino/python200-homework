@@ -157,8 +157,8 @@ def hypothesis_testing(df):
     # t-statistic, p-value, the mean happiness for each group, and a plain-language interpretation of the result at alpha = 0.05.
 
     #df by year
-    happy_scores_2019 = df[df['year']== 2019]['happiness_score']
-    happy_scores_2020 = df[df['year']== 2020]['happiness_score']
+    happy_scores_2019 = df[df['year']== 2019]['happiness_score'].dropna()
+    happy_scores_2020 = df[df['year']== 2020]['happiness_score'].dropna()
 
     #means
     mean_2019 = happy_scores_2019.mean()
@@ -227,13 +227,20 @@ def correlation_analysis(df):
     
     logger.info(f"Running {num_tests} correlation tests. Adjusted Alpha: {adjusted_alpha:.5f}")
     
-    strongest_var = None
+    strongest_sig_var = None
     max_corr = 0
+    strongest_overall = None
+    max_abs_r = 0
     
     for col in numeric_cols:
-        valid_data = df[[col, 'happiness_score']]
+        valid_data = df[[col, 'happiness_score']].dropna()
         if len(valid_data) > 2:
             r, p = stats.pearsonr(valid_data[col], valid_data['happiness_score'])
+
+            # Keep track of the absolute highest correlation regardless of significance
+            if abs(r) > abs(max_abs_r):
+                max_abs_r = r
+                strongest_overall = col
 
             sig_original = "YES" if p < original_alpha else "NO"
             sig_adjusted = "YES" if p < adjusted_alpha else "NO"
@@ -242,16 +249,16 @@ def correlation_analysis(df):
             
             if abs(r) > abs(max_corr) and p < adjusted_alpha:
                 max_corr = r
-                strongest_var = col
+                strongest_sig_var = col
                 
-    return strongest_var
+    return strongest_sig_var, strongest_overall
 
 
 # ==========================================
 # Task 6: Summary Report
 # ==========================================
 @task
-def summary_report(df, hypothesis_results, strongest_var):
+def summary_report(df, hypothesis_results, strongest_var,strongest_all):
     logger = get_run_logger()
     
     logger.info("==========================================")
@@ -267,8 +274,14 @@ def summary_report(df, hypothesis_results, strongest_var):
     
     # The top 3 and bottom 3 regions by mean happiness score.
     regional_mean = df.groupby('regional_indicator')['happiness_score'].mean().sort_values(ascending=False)
-    logger.info(f"- Top 3 happiest regions: {', '.join(regional_mean.head(3).index.tolist())}")
-    logger.info(f"- Bottom 3 happiest regions: {', '.join(regional_mean.tail(3).index.tolist())}")
+    logger.info(f"- Top 3 happiest regions:")
+    for i in range(3):
+        logger.info(f"  {i+1}. {regional_mean.index[i]} (Mean: {regional_mean.iloc[i]:.2f})")
+        
+    logger.info(f"- Bottom 3 happiest regions:")
+    for i in range(1, 4):
+        idx = -i
+        logger.info(f"  {i}. {regional_mean.index[idx]} (Mean: {regional_mean.iloc[idx]:.2f})")
         
     # The result of the pre/post-2020 t-test in plain language.
     pval = hypothesis_results["p_val_1"]
@@ -279,9 +292,11 @@ def summary_report(df, hypothesis_results, strongest_var):
         
     # 4. The variable most strongly correlated with happiness score (after Bonferroni correction).
     if strongest_var:
-        logger.info(f"- Strongest correlation with happiness (Bonferroni): '{strongest_var}'.")
+        logger.info(f"- Strongest correlation (Bonferroni): '{strongest_var}'.")
     else:
-        logger.info("- No variables survived the Bonferroni correction for significance.")
+        logger.info("- No variables survived the Bonferroni.")
+
+    logger.info(f"- Strongest correlation (Overall, regardless of significance): '{strongest_all}'.")
 
 ##### FLOW CODE #####
 # 2. FLow
@@ -303,10 +318,10 @@ def happiness_pipeline():
     hypothesis_results = hypothesis_testing(df)
 
     # Task 5: Correlation and Multiple Comparisons
-    strongest_var = correlation_analysis(df)
+    strongest_sig, strongest_all = correlation_analysis(df)
 
     # Task 6: Summary Report
-    summary_report(df, hypothesis_results, strongest_var)
+    summary_report(df, hypothesis_results, strongest_sig, strongest_all)
 
 # 3. Main
 if __name__ == "__main__":
