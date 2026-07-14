@@ -205,9 +205,10 @@ print(sorted_coefs)
 
 #CoMPARE train R2 and test R2:
 train_r2 = model.score(X_train,y_train)
+test_r2 = model.score(X_test,y_test)
 
 print(f"\nTrain R²: {train_r2:.4f}")
-print(f"Test R²: {r2:.4f}")
+print(f"Test R²: {test_r2:.4f}")
 #COMMENT: train is 0.1749 and test is 0.1539, so there is a small gap between them, meaningn that the model is generalized well. 
 
 # Finally, add a comment answering: if you were deploying this model in production, which features would you keep and which would you drop? Justify your choices based on what you see in the numbers.
