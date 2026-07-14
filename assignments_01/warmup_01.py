@@ -51,7 +51,7 @@ print(f"Mean by city:\n {mean_grades}\n")
 
 # Pandas Question 6: Replace the value "Austin" in the "city" column with "Houston". Print the "name" and "city" columns to confirm the change.
 df["city"] = df["city"].replace("Austin","Houston")
-print(f"New City:\n {df["city"]}\n")
+print(f"New City:\n {df['city']}\n")
 
 # Pandas Question 7: Sort the DataFrame by "grade" in descending order and print the top 3 rows.
 sorted_df = df.sort_values(by="grade",ascending=False)
