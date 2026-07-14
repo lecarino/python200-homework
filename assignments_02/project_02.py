@@ -46,7 +46,7 @@ plt.ylabel("Number of Students")
 plt.savefig("outputs/g3_distribution.png")
 plt.close()
 
-print("Plot saved to outputs/g3_distributions.png")
+print("Plot saved to outputs/g3_distribution.png")
 
 # ==========================================
 # --- Task 2: Preprocess the Data ---
@@ -261,7 +261,7 @@ print('Saved plot to outputs/predicted_vs_actual.png\n')
 # We kept it out because it is so powerful. Print the new test R². The jump will be large -- from roughly 0.30 to somewhere around 0.80.
 
 feature_cols = ["failures", "Medu", "Fedu", "studytime", "higher", "schoolsup",
-                "internet", "sex", "freetime", "activities", "traveltime", "G1"]
+                "internet", "sex", "freetime", "activities", "traveltime", "G1"] #Added G1 in features column!
 X = df_clean[feature_cols].values
 y = df_clean["G3"].values
 
@@ -280,6 +280,4 @@ print(f'r2: {r2:.4f} \n')
 
 # Add a comment addressing these questions: does a high R² here mean G1 is causing G3? 
 # Is this a useful model for identifying students who might struggle? What might educators need to do if they wanted to intervene early, before G1 is even available?
-# COMMENT: I don't think a high R2 here for G1 is causing G3. I think those who do well in G1 do well in G3 because of their study habits and work ethic which causes them to carry it over to G3.
-# It is a useful model and also not. a student could have a bad grade in G1 and try to study harder or get help to get better at G3. And vice versa, maybe a student who does well in G1 might get lazy and complacent for G3
-# If they want to intervene before G1 is available, then they might have to use my model with all the features before getting the grade of G1, since it may help predict who does well and who doesn't. 
+# COMMENT: I don't think a high R2 here for G1 is causing G3. I think those who do well in G1 do well in G3 because of their study habits and work ethic which causes them to carry it over to G3. It is a useful model and also not. a student could have a bad grade in G1 and try to study harder or get help to get better at G3. And vice versa, maybe a student who does well in G1 might get lazy and complacent for G3. If they want to intervene before G1 is available, then they might have to use my model with all the features before getting the grade of G1, since it may help predict who does well and who doesn't. 
