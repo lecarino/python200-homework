@@ -55,6 +55,8 @@ def load_data(data_dir):
             df["year"] = year
             
             all_data.append(df)
+            
+            logger.info(f"Columns for {year}: {df.columns.tolist()}")
             logger.info(f"Loaded {year} data: {len(df)} rows.")
         else:
             logger.warning(f"File not found for year {year}: {filepath}")
@@ -88,7 +90,7 @@ def descriptive_statistics(df):
     std = df[target_col].std()
 
     logger.info(f"overall stats:\n")
-    logger.info(f"Overall {target_col.capitalize} Stats: ")
+    logger.info(f"Overall {target_col.capitalize()} Stats: ")
     logger.info(f"Mean: {mean}")
     logger.info(f"Median: {median}")
     logger.info(f"Standard Deviation: {std}")
