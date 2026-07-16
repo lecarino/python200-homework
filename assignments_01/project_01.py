@@ -43,6 +43,7 @@ def load_data(data_dir):
 
             COLUMN_MAP = {
                 "ladder_score": "happiness_score",
+                "Happiness score": 'happiness_score',
             }
             
             #Standardize columns and I found 2024 happiness score is called ladder score
@@ -86,7 +87,7 @@ def descriptive_statistics(df):
     median = df[target_col].median()
     std = df[target_col].std()
 
-    logger.info(f"\noverall stats:\n")
+    logger.info(f"overall stats:\n")
     logger.info(f"Overall {target_col.capitalize} Stats: ")
     logger.info(f"Mean: {mean}")
     logger.info(f"Median: {median}")
