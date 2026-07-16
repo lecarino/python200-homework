@@ -41,21 +41,28 @@ def load_data(data_dir):
         if os.path.exists(filepath):
             df = pd.read_csv(filepath, sep=";", decimal=",")
 
+            #STANDARDIZE
+            df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+
             COLUMN_MAP = {
-                "ladder_score": "happiness_score",
-                "Happiness score": 'happiness_score',
+                "ladder_score": "happiness_score"
             }
             
-            #Standardize columns and I found 2024 happiness score is called ladder score
-            df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
-            df = df.rename(columns= COLUMN_MAP)
+            df = df.rename(columns=COLUMN_MAP)
 
             ## INSTRUCTION: each row needs to know which year it came from.
             #added year into columns
             df["year"] = year
             
             all_data.append(df)
-            
+
+            #Check if all columns are uniform: 
+            standardized_columns = ['ranking', 'country', 'regional_indicator', 'happiness_score', 'gdp_per_capita', 'social_support', 'healthy_life_expectancy', 'freedom_to_make_life_choices', 'generosity', 'perceptions_of_corruption', 'year']
+            if df.columns.tolist() != standardized_columns:
+                logger.info(f"WARNING COLUMNS ARE NOT STANDARDIZED for year: {year}")
+
+
+
             logger.info(f"Columns for {year}: {df.columns.tolist()}")
             logger.info(f"Loaded {year} data: {len(df)} rows.")
         else:
