@@ -57,7 +57,8 @@ def load_data(data_dir):
             all_data.append(df)
 
             #Check if all columns are uniform: 
-            standardized_columns = ['ranking', 'country', 'regional_indicator', 'happiness_score', 'gdp_per_capita', 'social_support', 'healthy_life_expectancy', 'freedom_to_make_life_choices', 'generosity', 'perceptions_of_corruption', 'year']
+            standardized_columns = ['ranking', 'country', 'regional_indicator', 'happiness_score', 'gdp_per_capita', 'social_support', 'healthy_life_expectancy', 'freedom_to_make_life_choices', 
+                                    'generosity', 'perceptions_of_corruption', 'year']
             if df.columns.tolist() != standardized_columns:
                 logger.info(f"WARNING COLUMNS ARE NOT STANDARDIZED for year: {year}")
 
