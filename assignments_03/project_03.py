@@ -124,8 +124,8 @@ features = ['word_freq_free','char_freq_!','capital_run_length_total' ]
 
 
 for feature in features:
-    spam = df['word_freq_free'][df["spam_label"]==1]
-    ham =  df['word_freq_free'][df["spam_label"]!=1]
+    spam = df[feature][df["spam_label"]==1]
+    ham =  df[feature][df["spam_label"]!=1]
 
     plt.figure()
     plt.boxplot([ham, spam],tick_labels=['Ham','Spam'])
@@ -270,11 +270,11 @@ for depth in depths:
 # What do you notice as depth increases? What does that tell you about overfitting? 
 # Pick the depth you would use in production and add a comment explaining your reasoning. Then, using your chosen depth, print the accuracy and full classification report as you did for the other classifiers.
 
-#COMMENT: As depth increased, the accuracy of both the training and test sets increased. 
+#COMMENT: As depth increased, training accuracy went all the way to 1.0. However, the test accuracy leveled off, which tells us the unlimited model was overfitting to the training data. I chose a depth of 10 for production because it gives the best test accuracy without perfectly memorizing the training noise.
 
-print("\n-----DECISION TREE CLASSIFIER CHOSEN DEPTH: NONE-----\n")
-#CHOSEN DEPTH: NONE
-dt = DecisionTreeClassifier(max_depth=None,random_state=42)
+print("\n-----DECISION TREE CLASSIFIER CHOSEN DEPTH: 10-----\n")
+#CHOSEN DEPTH: 10
+dt = DecisionTreeClassifier(max_depth=10, random_state=42)
 #fit
 dt.fit(X_train,y_train)
 #predict
@@ -322,7 +322,7 @@ print("Saved plot to outputs/feature_importances.png")
 print("\n-----LOGISTIC REGRESSION-----\n")
 
 # SCALED
-lr_scaled = LogisticRegression(C=1.0, max_iter=1000)
+lr_scaled = LogisticRegression(C=1.0, max_iter=1000, solver='liblinear')
 lr_scaled.fit(X_train_scaled, y_train)
 preds_lr_scaled = lr_scaled.predict(X_test_scaled)
 
@@ -330,7 +330,7 @@ print(f"LR Scaled Accuracy Score: {accuracy_score(y_test, preds_lr_scaled):.3f}"
 print(f"LR Scaled Classification Report:\n{classification_report(y_test, preds_lr_scaled)}\n")
 
 # PCA
-lr_pca = LogisticRegression(C=1.0, max_iter=1000)
+lr_pca = LogisticRegression(C=1.0, max_iter=1000, solver='liblinear')
 lr_pca.fit(X_train_pca, y_train)
 preds_lr_pca = lr_pca.predict(X_test_pca)
 
