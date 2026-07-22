@@ -187,14 +187,14 @@ log_reg_1.fit(X_train_scaled, y_train)
 print(f"C Value (0.01): {np.abs(log_reg_1.coef_).sum()}")
 
 #Create
-log_reg_2 = LogisticRegression(C=1.0, max_iter=1000)
+log_reg_2 = LogisticRegression(C=0.01, max_iter=1000)
 #fit
 log_reg_2.fit(X_train_scaled,y_train)
 #print
 print(f"C Value (1.0): {np.abs(log_reg_2.coef_).sum()}")
 
 #Create
-log_reg_3 = LogisticRegression(C=100, max_iter=1000)
+log_reg_3 = LogisticRegression(C=0.01, max_iter=1000)
 #Fit
 log_reg_3.fit(X_train_scaled,y_train)
 #print
@@ -310,5 +310,5 @@ plt.savefig("outputs/pca_reconstructions.png")
 plt.close()
 print("Saved plot to outputs/pca_reconstructions.png")
 
-# COMMENT: In my honest opinion i think the original looks the best, so n = 0. Maybe i'm blind. but it's supposed to be n=15 where it looks the best because of the 800% variance we did in Q3.
+# COMMENT: At n=2 and n=5, the images are mostly blurry blobs. By n=15, the digits become clearly recognizable as numbers. This makes sense because, as seen in Q3, 14-15 components capture about 80% of the variance in the dataset. By n=40, the reconstructions look almost exactly like the original images.
 
