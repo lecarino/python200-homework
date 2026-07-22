@@ -280,8 +280,8 @@ dt.fit(X_train,y_train)
 #predict
 preds_dt = dt.predict(X_test)
 #print
-print(f"DT Depth None Accuracy Score: {accuracy_score(y_test,preds_dt):.2f}")
-print(f"DT Depth None Classification Report:\n{classification_report(y_test,preds_dt)}\n")
+print(f"DT Depth 10 Accuracy Score: {accuracy_score(y_test,preds_dt):.2f}")
+print(f"DT Depth 10 Classification Report:\n{classification_report(y_test,preds_dt)}\n")
 
 
 # ==========================================
