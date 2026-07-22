@@ -187,14 +187,14 @@ log_reg_1.fit(X_train_scaled, y_train)
 print(f"C Value (0.01): {np.abs(log_reg_1.coef_).sum()}")
 
 #Create
-log_reg_2 = LogisticRegression(C=0.01, max_iter=1000)
+log_reg_2 = LogisticRegression(C=1.0, max_iter=1000)
 #fit
 log_reg_2.fit(X_train_scaled,y_train)
 #print
 print(f"C Value (1.0): {np.abs(log_reg_2.coef_).sum()}")
 
 #Create
-log_reg_3 = LogisticRegression(C=0.01, max_iter=1000)
+log_reg_3 = LogisticRegression(C=100, max_iter=1000)
 #Fit
 log_reg_3.fit(X_train_scaled,y_train)
 #print
@@ -247,6 +247,9 @@ scores = pca.transform(X_digits)
 # Use scores[:, 0] and scores[:, 1] to make a scatter plot, coloring each point by its digit label and adding a colorbar. Here is the pattern for coloring by a label array and attaching a colorbar:
 scatter = plt.scatter(scores[:, 0], scores[:, 1], c=y_digits, cmap='tab10', s=10)  # c = color array
 plt.colorbar(scatter, label='Digit')
+plt.title("PCA 2D Projection of Digits")
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
 
 
 # Save the figure to outputs/pca_2d_projection.png. Add a comment: do same-digit images tend to cluster together in this 2D space?

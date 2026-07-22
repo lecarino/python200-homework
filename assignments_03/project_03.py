@@ -351,7 +351,8 @@ print("\n-----BEST MODEL CONFUSION MATRIX-----\n")
 # A False Negative (a spam email slipping into the inbox) is just a minor annoyance that can be manually deleted.
 
 # Generate the confusion matrix for the best model: (Random Forest)
-cm = confusion_matrix(y_test, rf.predict(X_test))
+best_model = rf
+cm = confusion_matrix(y_test, best_model.predict(X_test))
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Ham (0)", "Spam (1)"])
 
 disp.plot(cmap="Blues")
