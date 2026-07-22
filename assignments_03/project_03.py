@@ -280,8 +280,13 @@ dt.fit(X_train,y_train)
 #predict
 preds_dt = dt.predict(X_test)
 #print
-print(f"DT Depth 10 Accuracy Score: {accuracy_score(y_test,preds_dt):.2f}")
+print(f"DT Depth 10 Accuracy Score: {accuracy_score(y_test,preds_dt):.3f}")
 print(f"DT Depth 10 Classification Report:\n{classification_report(y_test,preds_dt)}\n")
+
+# COMMENT (Decision Tree vs KNN & Scaling):
+# The Decision Tree (Depth 10) achieved similar accuracy to the Scaled KNN model. 
+# However, unlike KNN, Decision Trees do not rely on distance calculations. They simply split data based on feature thresholds. Because of this, scaling the data does not affect a Decision Tree's results at all.
+
 
 
 # ==========================================
@@ -420,10 +425,10 @@ print(f"Mean: {cv_scores_lr_pca.mean():.3f}")
 print(f"STD:  {cv_scores_lr_pca.std():.3f}\n")
 
 # Which model is the most accurate? Which is the most stable (lowest variance across folds)? Does the ranking match what you saw with the single train/test split?
-#Comment: Random Forest is the most accurate model. It has the highest mean cross-validation score of 0.954 (or 95.4%), beating out all the other classifiers by a solid margin.
-# Logistic Regression PCA is the most stable. It has the lowest standard deviation across the 5 folds at just 0.003.
-# Yes the ranking matches what i saw with the single train/test split from the previous task, showing it's not random.
-
+# COMMENT ON CROSS-VALIDATION:
+# 1. Most Accurate: The Random Forest model is the most accurate because it achieved the highest mean cross-validation score (0.954).
+# 2. Most Stable: The Logistic Regression PCA model is the most stable because it has the lowest variance/standard deviation across the 5 folds (0.003).
+# 3. Ranking Match: Yes, this ranking matches the single train/test split. Random Forest was the best performer in both, and the Unscaled KNN was the worst in both.
 
 # ==========================================
 # ---Task 5: Building a Prediction Pipeline---
@@ -476,15 +481,15 @@ print(f"Tree Pipeline (Random Forest) Classification report: {classification_rep
 #Best Non Tree: LR Scaled
 lr_pipeline = Pipeline([
     ("scaler", StandardScaler()),
-    ("classifier",  LogisticRegression(C=1.0, max_iter=1000))
+    ("pca", PCA(n_components=n)),
+    ("classifier", LogisticRegression(C=1.0, max_iter=1000, solver='liblinear'))
 ])
 
-#Fit
 lr_pipeline.fit(X_train, y_train)
-#Predict
 lr_pipeline_preds = lr_pipeline.predict(X_test)
-#Print
-print(f"Non-Tree Pipeline (Logistic Regression) Classification Report:{classification_report(y_test, lr_pipeline_preds)}")
+
+print(f"Non-Tree Pipeline (Logistic Regression with PCA) Accuracy: {accuracy_score(y_test, lr_pipeline_preds):.3f}")
+print(f"Classification Report:\n{classification_report(y_test, lr_pipeline_preds)}")
 
 # Comment on your pipelines: do they have the same structure? Why or why not? What is the practical value of packaging a model this way, especially when handing it off to someone else or deploying it?
 # COMMENT:
