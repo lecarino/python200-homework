@@ -77,4 +77,4 @@ print("\n-----Task 3: Reflect-----\n")
 
 # COMMENT: The borderline case i included was Day 5. The model's confidence (probability) was 70%. I would say the model's answer was pretty confident. I would handle a day where it was 0.52 confident as not good for running. I'd rather not run on a good day than run in a bad day.
 # if someone ran predict_weather.py before train_weather_classifier.py, then it wouldn't work because train_weather_classifier.py creates the models that are needed for predict_weather.py. I would make the error message more helpful by letting the user know that you need to run the train_weather_classifier.py first so you can have the prediction model.
-# I would need to change the task 2 in predict_weather.py to support actual data. I might need to implement past weather conditions rather than hard-coding new_days. 
+# I would need to change the task 2 in predict_weather.py to support actual data. I might need to implement past weather conditions rather than hard-coding new_days.
