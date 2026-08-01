@@ -184,7 +184,7 @@ print("\n-----LR Q5-----\n")
 # A perfect model would place every point on the diagonal line where predicted equals actual.
 
 # Using the two-feature model from Linear Regression Question 4, create this plot for the test set. 
-# Add a diagonal reference line, a title "Predicted vs Actual", labeled axes, and save to outputs/predicted_vs_actual.png.
+# Add a diagonal reference line, a title "Predicted vs Actual", labeled axes, and save to outputs/predicted_vs_actual_cost.png.
 
 #PREEDICT:
 y_full_pred = model_full.predict(X_full_test)
@@ -199,10 +199,10 @@ plt.plot([min_val, max_val], [min_val, max_val], color='red', linestyle='--')
 plt.title("Predicted vs Actual")
 plt.xlabel("Model's Prediction")
 plt.ylabel("True Values")
-plt.savefig("outputs/predicted_vs_actual.png")
+plt.savefig("outputs/predicted_vs_actual_cost.png")
+print("Plot has been saved to outputs/predicted_vs_actual_cost.png")
 plt.close()
 
-print("Plot has been saved to outputs/predicted_vs_actual.png")
 
 #  what does it mean when a point falls above the diagonal? What about below?
 #COMMENT: If a point falls above, then the model underpredicted and if it was below, then the model overpredicted. 

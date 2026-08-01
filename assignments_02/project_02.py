@@ -166,8 +166,11 @@ print("\n-----TASK 5:-----\n")
 # Now build a regression model using all of the numeric and binary features from the Feature Guide:
 df_clean = new_df.copy()
 
-feature_cols = ["failures", "Medu", "Fedu", "studytime", "higher", "schoolsup",
-                "internet", "sex", "freetime", "activities", "traveltime"]
+feature_cols = [
+    "age", "Medu", "Fedu", "traveltime", "studytime", "failures", 
+    "absences", "freetime", "goout", "Walc", "schoolsup", 
+    "internet", "higher", "activities", "sex"
+]
 X = df_clean[feature_cols].values
 y = df_clean["G3"].values
 
@@ -234,9 +237,9 @@ plt.xlabel("Predicted Grade (y_hat)")
 plt.ylabel("Actual Grade (y)")
 plt.legend()
 
-plt.savefig("outputs/predicted_vs_actual.png")
+plt.savefig("outputs/predicted_vs_actual_g3.png")
 plt.close()
-print('Saved plot to outputs/predicted_vs_actual.png\n')
+print('Saved plot to outputs/predicted_vs_actual_g3.png\n')
 
 # Add a comment: does the model seem to struggle more at the high end, the low end, or is error roughly uniform across grade levels? What does a value above or below the diagonal mean?
 # COMMENT: The error is roughly uniform across grade levels. The value above means the actual score is higher than the perfect prediction, while the values below means that they're lower than the perfect prediction.
