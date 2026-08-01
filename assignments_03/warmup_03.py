@@ -180,27 +180,13 @@ print("\n-----LR & R Q1-----\n")
 # For each model, print the C value and the total size of all coefficients using np.abs(model.coef_).sum(). 
 # Add a comment: what happens to the total coefficient magnitude as C increases? What does this tell you about what regularization is doing?
 
-# Create
-log_reg_1 = OneVsRestClassifier(LogisticRegression(C=0.01, max_iter=1000, solver='liblinear'))
-# Fit
-log_reg_1.fit(X_train_scaled, y_train)
-coef_sum_1 = sum(np.abs(est.coef_).sum() for est in log_reg_1.estimators_)
-# Print
-print(f"C Value (0.01): {coef_sum_1:.3f}")
-
-#Create
-log_reg_2 = OneVsRestClassifier(LogisticRegression(C=1.0, max_iter=1000, solver='liblinear'))
-#fit
-log_reg_2.fit(X_train_scaled,y_train)
-coef_sum_2 = sum(np.abs(est.coef_).sum() for est in log_reg_2.estimators_)
-print(f"C Value (1.0): {coef_sum_2:.3f}")
-
-#Create
-log_reg_3 = OneVsRestClassifier(LogisticRegression(C=100, max_iter=1000, solver='liblinear'))
-#fit
-log_reg_3.fit(X_train_scaled, y_train)
-coef_sum_3 = sum(np.abs(est.coef_).sum() for est in log_reg_3.estimators_)
-print(f"C Value (100): {coef_sum_3:.3f}")
+for C in [0.01, 1.0, 100]:
+    log_reg = OneVsRestClassifier(LogisticRegression(C=C, max_iter=1000, solver="liblinear"))
+    log_reg.fit(X_train_scaled, y_train)
+    
+    # Using the Tom Arns' method on SLack:
+    coef_sum = np.abs(np.vstack([est.coef_ for est in log_reg.estimators_])).sum()
+    print(f"C={C}, total coefficient magnitude={coef_sum}")
 #Comment: As C increases, the total coefficient magnitude increases as well. C value is inverse to regularization strength. A small C applies strong regularization, shrinking the coefficients toward zero to prevent overfitting. A large C applies weak regularization, allowing the coefficients to grow larger to fit the training data.
 
 # ==========================================

@@ -190,7 +190,7 @@ plt.savefig("outputs/pca_spam_variance.png")
 plt.close()
 
 n = np.where(cumulative_variance >= 0.90)[0][0] + 1
-
+print(f"Number of components for 90% variance (n): {n}")
 # With n determined, transform both sets and slice to the first n components:
 X_train_pca = pca.transform(X_train_scaled)[:, :n]
 X_test_pca  = pca.transform(X_test_scaled)[:, :n]
@@ -270,8 +270,7 @@ for depth in depths:
 # What do you notice as depth increases? What does that tell you about overfitting? 
 # Pick the depth you would use in production and add a comment explaining your reasoning. Then, using your chosen depth, print the accuracy and full classification report as you did for the other classifiers.
 
-#COMMENT: As depth increased, training accuracy went all the way to 1.0. However, the test accuracy leveled off, which tells us the unlimited model was overfitting to the training data. I chose a depth of 10 for production because it gives the best test accuracy without perfectly memorizing the training noise.
-
+# COMMENT: As depth increased from 3 to 10 to None, the training accuracy went all the way up to a perfect 1.0. However, the test accuracy leveled off around 0.91 and stopped improving. This divergence shows the unlimited model was overfitting and perfectly memorizing the training noise. I chose a depth of 10 for production because it gives the highest test accuracy before the model starts severely overfitting.
 print("\n-----DECISION TREE CLASSIFIER CHOSEN DEPTH: 10-----\n")
 #CHOSEN DEPTH: 10
 dt = DecisionTreeClassifier(max_depth=10, random_state=42)
@@ -475,21 +474,21 @@ rf_pipeline.fit(X_train,y_train)
 #predict:
 rf_pipeline_predict = rf_pipeline.predict(X_test)
 #Print
-print(f"Tree Pipeline (Random Forest) Classification report: {classification_report(y_test,rf_pipeline_predict)}")
+print(f"Tree Pipeline (Random Forest) Accuracy: {accuracy_score(y_test, rf_pipeline_predict):.3f}")
+print(f"Tree Pipeline (Random Forest) Classification Report:\n{classification_report(y_test, rf_pipeline_predict)}\n")
 
 
 #Best Non Tree: LR Scaled
 lr_pipeline = Pipeline([
     ("scaler", StandardScaler()),
-    ("pca", PCA(n_components=n)),
     ("classifier", LogisticRegression(C=1.0, max_iter=1000, solver='liblinear'))
 ])
 
 lr_pipeline.fit(X_train, y_train)
 lr_pipeline_preds = lr_pipeline.predict(X_test)
 
-print(f"Non-Tree Pipeline (Logistic Regression with PCA) Accuracy: {accuracy_score(y_test, lr_pipeline_preds):.3f}")
-print(f"Classification Report:\n{classification_report(y_test, lr_pipeline_preds)}")
+print(f"Non-Tree Pipeline (LR Scaled) Accuracy: {accuracy_score(y_test, lr_pipeline_preds):.3f}")
+print(f"Non-Tree Pipeline (LR Scaled) Classification Report:\n{classification_report(y_test, lr_pipeline_preds)}\n")
 
 # Comment on your pipelines: do they have the same structure? Why or why not? What is the practical value of packaging a model this way, especially when handing it off to someone else or deploying it?
 # COMMENT:
