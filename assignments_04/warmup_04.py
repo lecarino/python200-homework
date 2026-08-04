@@ -75,81 +75,6 @@ y_probs_knn = knn.predict_proba(X_test_scaled)[:, 1]
 auc_knn = roc_auc_score(y_test,y_probs_knn)
 # Print: 
 print(f"KNN Scaled AUC score: {auc_knn:.3f}")
-'''
-Part 1: Warmup Exercises
-'''
-
-import os
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.datasets import make_classification
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
-from sklearn.metrics import (
-    roc_curve,
-    roc_auc_score,
-    RocCurveDisplay,
-    classification_report,
-)
-import joblib
-
-os.makedirs("outputs", exist_ok=True)
-os.makedirs("models", exist_ok=True)
-
-# Synthetic dataset — binary classification, two informative features
-X, y = make_classification(
-    n_samples=1000,
-    n_features=10,
-    n_informative=4,
-    n_redundant=2,
-    random_state=42,
-)
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
-)
-
-
-# ==========================================
-# --- ROC and AUC ---
-# ==========================================
-print("\n-----ROC and AUC Q1-----\n")
-
-# Train a LogisticRegression(max_iter=1000, random_state=42) on the raw (unscaled) training data and a KNeighborsClassifier(n_neighbors=5) on the scaled training data. For each model:
-# Compute predicted probabilities on the test set using .predict_proba()
-# Compute and print the AUC score using roc_auc_sco
-
-#Logistic Regression: 
-# Create:
-lr = LogisticRegression(max_iter=1000, random_state=42)
-# Fit:
-lr.fit(X_train,y_train)
-# Predict: 
-y_probs_lr = lr.predict_proba(X_test)[:, 1]
-# AUC
-roc_auc_lr = roc_auc_score(y_test,y_probs_lr)
-# Print
-print(f"LR AUC score: {auc_lr:.3f}")
-
-# KNN
-# Scale:
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled  = scaler.transform(X_test)
-# Create:
-knn = KNeighborsClassifier(n_neighbors=5)
-# Fit:
-knn.fit(X_train_scaled,y_train)
-# Predict:
-y_probs_knn = knn.predict_proba(X_test_scaled)[:, 1]
-# AUC: 
-roc_auc_knn = roc_auc_score(y_test,y_probs_knn)
-# Print: 
-print(f"KNN Scaled AUC score: {auc_knn:.3f}")
 
 # Add a comment: which model has higher AUC? What does that tell you about which model better separates the two classes, independently of any threshold choice?
 # COMMENT: The KNN Scaled model has a higher AUC. The KNN Scaled model better separates the two classes because a higher AUC means that, across all possible classification thresholds, 
@@ -167,7 +92,7 @@ fpr_lr, tpr_lr, thresholds_lr = roc_curve(y_test, y_probs_lr)
 fpr_knn, tpr_knn, thresholds_knn = roc_curve(y_test, y_probs_knn)
 
 fig, ax = plt.subplots(figsize=(6, 5))
-RocCurveDisplay(fpr=fpr_lr, tpr=tpr_lr,roc_auc=roc_auc_lr).plot(ax=ax, name="Logistic Regression")
+RocCurveDisplay(fpr=fpr_lr, tpr=tpr_lr,roc_auc=auc_lr).plot(ax=ax, name="Logistic Regression")
 RocCurveDisplay(fpr=fpr_knn, tpr=tpr_knn, roc_auc=auc_knn).plot(ax=ax, name="KNN (Scaled)")
 ax.plot([0, 1], [0, 1], linestyle="--", color="gray", label="Random classifier")
 ax.set_title("ROC Curves Comparison")
