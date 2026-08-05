@@ -188,7 +188,7 @@ def is_safe(text: str) -> bool:
     # Your code here: return True if safe, False if flagged, and print a message if flagged
 
     if flagged:
-        print(f"Please rephrase the input:{text}")
+        print("Please rephrase the input. It was flagged by moderation.")
         return False
     else:
         return True
@@ -258,12 +258,16 @@ def run_chatbot():
                     raw_bullets.append(line)
             # YOUR CODE: call rewrite_bullets() and print the results
             rewritten_bullets = rewrite_bullets(raw_bullets)
-            print("\nJob Application Helper: Here are your rewritten bullets:\n")
-            print(rewritten_bullets)
-            print("\n")
+
+            memory_string = "Here are the improved bullets:\n"
+            for b in rewritten_bullets:
+                memory_string += f"- {b['improved']}\n"
+                
+            # Safely append strings to history
+            messages.append({"role": "user", "content": f"Rewrite these bullets: {raw_bullets}"})
+            messages.append({"role": "assistant", "content": memory_string})
             
-            messages.append({"role": "user", "content": f"Can you rewrite these bullets? {raw_bullets}"})
-            messages.append({"role": "assistant", "content": rewritten_bullets})
+
         # 6. Check if the user wants a cover letter
         elif "cover letter" in user_input.lower():
             job_title = input("Job Application Helper: What is the job title? ").strip()
