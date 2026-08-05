@@ -201,7 +201,7 @@ print(f"Result: {is_safe(safe_text)}\n")
 
 # Fail:
 unsafe_text = "I am going to kill somebody if i dont get the job!"
-print(f"Testing unsafe text: '{unsafe_text}")
+print(f"Testing unsafe text: '{unsafe_text}'")
 print(f"Result: {is_safe(unsafe_text)}\n")
 
 
@@ -257,8 +257,13 @@ def run_chatbot():
                 if line:
                     raw_bullets.append(line)
             # YOUR CODE: call rewrite_bullets() and print the results
-            rewrite_bullets(raw_bullets)
-
+            rewritten_bullets = rewrite_bullets(raw_bullets)
+            print("\nJob Application Helper: Here are your rewritten bullets:\n")
+            print(rewritten_bullets)
+            print("\n")
+            
+            messages.append({"role": "user", "content": f"Can you rewrite these bullets? {raw_bullets}"})
+            messages.append({"role": "assistant", "content": rewritten_bullets})
         # 6. Check if the user wants a cover letter
         elif "cover letter" in user_input.lower():
             job_title = input("Job Application Helper: What is the job title? ").strip()
@@ -268,6 +273,9 @@ def run_chatbot():
             print("\n--- Here is your Cover Letter Opening ---")
             print(cover_letter)
             print("-----------------------------------------\n")
+            # FIXED: Add to history
+            messages.append({"role": "user", "content": f"Write a cover letter for {job_title}. Background: {background}"})
+            messages.append({"role": "assistant", "content": cover_letter})
 
         # 7. Otherwise, handle it as a regular chat turn
         else:
@@ -303,7 +311,11 @@ print("\n-----Task 6: Ethics Reflection-----\n")
 
 # 1. Your bot was trained on text written by and about certain kinds of people. How might this produce biased advice? Could it favor certain communication styles, industries, or cultural backgrounds?
 #  - If my bot was trained on written text and about certain kinds of people, then the bot will be biased to the opinions or claims of certain specified people. It could favor anything, from communication styles, industries, or cultural backgrounds based on what the bot intakes as its training data or sources. 
-# Bots, overall, are trained by whoever or whatever source they train on. Those things are not always objective. 
+# Bots, overall, are trained by whoever or whatever source they train on. Those things are not always objective. If my bot was trained on text written by and about certain kinds of people, it will naturally be biased toward those specific communication styles, industries, or cultural backgrounds.
 
 # 2. What could go wrong if a job-seeker submitted the bot's output directly — without reviewing it — to a real employer?
 #  - Then it's like the bot is doing the whole submission and the user is not at least putting in some effort to correct or adjust the written output from the bot. Many things go wrong like typos or wrong inputs. Bots are not perfect, they may end up putting thins in that's not ideal for the job or employer.
+#  So basically if a job-seeker submits the bot's output directly without reviewing it, they risk submitting something with typos, incorrect facts, or a robotic tone that doesn't accurately represent their real experience.
+
+# 3. What is one guardrail you would add if you were deploying this tool professionally? (A guardrail is any design choice that reduces the chance of harm — a UI warning, a moderation filter, a usage policy, a disclaimer, or something else entirely.)
+#  - If I were deploying this tool professionally, one guardrail I would add is a mandatory UI warning before generating text that explicitly reminds the user to verify all outputs and not misrepresent their actual technical skills to employers.
