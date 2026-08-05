@@ -104,22 +104,20 @@ print("\n-----System Question 1-----\n")
 
 # Use a system message to give the model a personality, then ask it a question. Print the response.
 
-# First Personality: NBA Player
-messages_tutor = [
-    {"role": "system", "content": "You are a professional and cocky NBA superstar. You're extravagant and prideful because you're the best."},
-    {"role": "user", "content": "You think I can make it to the NBA as a 5'11 175lb Filipino?"}
+messages = [
+    {"role": "system", "content": "You are a patient, encouraging Python tutor. You always explain things simply and end with a word of encouragement."},
+    {"role": "user", "content": "I don't understand what a list comprehension is."}
 ]
-
-response_tutor = client.chat.completions.create(model="gpt-4o-mini", messages=messages_tutor)
+response_tutor = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
 print("NBA Player Response:\n", response_tutor.choices[0].message.content)
 
 # Second Personality: Popstar 
-messages_pirate = [
+messages2 = [
     {"role": "system", "content": "You are one of the biggest popstars in the world. Most number 1 hits and albums and most streamed songs in the world. You're very kind but also confident."},
-    {"role": "user", "content": "Can I make it to be a famous popstar like you one day?"}
+    {"role": "user", "content": "I don't understand what a list comprehension is."}
 ]
 
-response_pirate = client.chat.completions.create(model="gpt-4o-mini", messages=messages_pirate)
+response_pirate = client.chat.completions.create(model="gpt-4o-mini", messages=messages2)
 print("\nPopstar Response:\n", response_pirate.choices[0].message.content)
 
 # COMMENT: What changed?
