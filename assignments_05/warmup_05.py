@@ -35,10 +35,101 @@ print("\nNumber of tokens used:")
 print(response.usage.total_tokens)
 
 
+
 # ==========================================
 # --- API Question 2 ---
 # ==========================================
 print("\n-----API Question 2-----\n")
+# Run the same prompt three times with three different temperature settings: 0, 0.7, and 1.5. Print each response, labeled with its temperature.
+prompt = "Suggest a creative name for a data engineering consultancy."
+temperatures = [0, 0.7, 1.5]
+
+for temp in temperatures:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=temp
+    )
+    print(f"--- Temperature {temp} ---")
+    print(response.choices[0].message.content)
+    print()
+
+# Add a comment in your code answering: What do you notice about how the outputs differ? Which temperature would you use if you needed a consistent, reproducible output?
+# COMMENT: What do you notice about how the outputs differ? Which temperature would you use if you needed a consistent, reproducible output?
+# At temperature 0, the output is very standard and literal. At 0.7, it's a bit more creative but still grounded. 
+# At 1.5, it gets highly erratic, nonsensical, or makes up weird words. If I needed a consistent, reproducible output, I would use temperature 0
+
+
+# ==========================================
+# --- API Question 3 ---
+# ==========================================
+print("\n-----API Question 3-----\n")
+# Use n=3 with temperature=1.0 to get three different completions in a single API call. Print all three.
+
+response_q3 = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Give me a one-sentence fun fact about pandas (the animal, not the library)."}],
+    n=3,
+    temperature=1.0
+)
+
+# Iterate over response.choices and print each one.
+for i, choice in enumerate(response_q3.choices, 1):
+    print(f"Response {i}: {choice.message.content}")
+
+
+# ==========================================
+# --- API Question 4 ---
+# ==========================================
+print("\n-----API Question 4-----\n")
+# Set max_tokens=15 and send a prompt that would normally produce a long response (for example, "Explain how neural networks work."). 
+# Print the result. Add a comment: What happened, and why might you want to use max_tokens in a real application?
+
+response= client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Explain how neural networks work."}],
+    max_tokens=15
+)
+
+print(response.choices[0].message.content)
+
+# COMMENT: What happened, and why might you want to use max_tokens in a real application?
+# The output cuts off mid-sentence because it hit the token limit. You might want to use max_tokens in a real application to control API costs or to prevent the bot from rambling on and on.
+
+
+# ==========================================
+# --- System Question 1 ---
+# ==========================================
+print("\n-----System Question 1-----\n")
+
+# Use a system message to give the model a personality, then ask it a question. Print the response.
+
+# First Personality: NBA Player
+messages_tutor = [
+    {"role": "system", "content": "You are a professional and cocky NBA superstar. You're extravagant and prideful because you're the best."},
+    {"role": "user", "content": "You think I can make it to the NBA as a 5'11 175lb Filipino?"}
+]
+
+response_tutor = client.chat.completions.create(model="gpt-4o-mini", messages=messages_tutor)
+print("NBA Player Response:\n", response_tutor.choices[0].message.content)
+
+# Second Personality: Popstar 
+messages_pirate = [
+    {"role": "system", "content": "You are one of the biggest popstars in the world. Most number 1 hits and albums and most streamed songs in the world. You're very kind but also confident."},
+    {"role": "user", "content": "Can I make it to be a famous popstar like you one day?"}
+]
+
+response_pirate = client.chat.completions.create(model="gpt-4o-mini", messages=messages_pirate)
+print("\nPopstar Response:\n", response_pirate.choices[0].message.content)
+
+# COMMENT: What changed?
+# Changing the system prompt completely altered the tone, vocabulary, and length of the response, even though the I asked somewhat the same question.
+
+
+# ==========================================
+# --- System Question 2 ---
+# ==========================================
+print("\n-----System Question 2-----\n")
 
 # The completions API is stateless — it has no memory of previous calls. The way to give a model context is to pass the conversation history yourself as a list of messages.
 # Build the following conversation manually (no loop, no user input — just construct the list) and send it in a single API call:
