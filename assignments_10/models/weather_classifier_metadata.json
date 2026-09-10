@@ -1,0 +1,20 @@
+{
+    "python_version": "3.12.13 (main, Jun 23 2026, 15:54:40) [Clang 22.1.3 ]",
+    "scikit_learn_version": "1.9.0",
+    "features": [
+        "temperature_2m_max",
+        "temperature_2m_min",
+        "precipitation_sum",
+        "wind_speed_10m_max"
+    ],
+    "best_hyperparameters": {
+        "clf__C": 1.0
+    },
+    "test_auc": 0.982,
+    "location": {
+        "city": "Monaco",
+        "latitude": 43.7314,
+        "longitude": 7.419
+    },
+    "label_thresholds": "Good for running: Max temp 7-32C, Min temp >= 0C, Precip < 3.0mm, Wind < 30km/h"
+}
